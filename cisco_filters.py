@@ -19,13 +19,13 @@ def cisco_interface_range(iface_range):
     ifaces = list()
     for iface_range in iface_ranges:
         match = re.match(r"""(?P<interface>[A-Za-z]+) # Interface name
-                        (?P<module>([0-9]/){1,2}) # Module
+                        (?P<module>([0-9]/){0,2}) # Module
                         (?P<ports>([0-9])+(-[0-9]+)?)""",iface_range, re.X)
         if not match:
-            raise AnsibleFilterError('unable to parse interface')
+            raise AnsibleFilterError('unable to parse interface: {}'.format(iface_range))
         #interface = match.group('interface')
         interface = _cisco_interface_name(match.group('interface'))
-        module = match.group('module')
+        module = match.group('module') or ""
         ports = match.group('ports')
         
         tokens = ports.split('-')
