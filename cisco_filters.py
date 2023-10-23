@@ -49,7 +49,12 @@ def _cisco_interface_name(short_name):
         "HundredGigabitEthernet",
         "GigabitEthernet",
     ]
-    #fixme: Make some try, exception code if no match found.
+    matches = list()
     for name in full_names:
         if name.lower().startswith(short_name):
-            return name
+            matches.append(name)
+    
+    if len(matches) == 1:
+        return matches[0]
+    else:
+        raise AnsibleFilterError('interface name syntax error: {}'.format(short_name))
